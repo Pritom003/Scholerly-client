@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={` ${merriweather.variable} antialiased`}
+        className={` ${merriweather.variable} antialiased bg-[#E3E3E5]`}
       >
 <ConfigProvider>
           {children}

@@ -6,7 +6,7 @@ export interface ContainerProps {
 
 const Container = ({ children }: ContainerProps) => {
   return (
-    <div className='w-[80%] mx-auto  mr-20 bg-red-800'>
+    <div className='w-[80%] mx-auto  '>
       {children}
     </div>
   );

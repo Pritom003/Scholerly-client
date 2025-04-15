@@ -20,7 +20,7 @@ const Navbar = () => {
   const pathname = usePathname()
 
   return (
-    <header className="w-full  top-0 z-50 bg-white ">
+    <header className="w-full  top-0 z-50 bg-[#E3E3E5] ">
       <div className="w-[80%] mx-auto flex items-center justify-between h-16">
         {/* Left: Logo */}
         <div className="flex-shrink-0">
