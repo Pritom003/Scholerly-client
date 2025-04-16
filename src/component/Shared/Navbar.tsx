@@ -11,7 +11,7 @@ import Logo from '../../../public/logo-2withbg.png'
 const pages = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
-  { label: 'All Tutors', href: '/tutors' },
+  { label: 'All Tutors', href: '/all-tutor' },
   { label: 'Bookings', href: '/bookings' },
   { label: 'Contact', href: '/contact' },
 ]

@@ -2,6 +2,8 @@ import React from 'react';
 import SectionTitle from '../Shared/SectionTitle';
 import Container from '../Shared/Container/Container';
 import LottieAnimation from '../Shared/animation/LottieAnimation';
+import Button from '@/lib/Buttons/Button';
+import Link from 'next/link';
 
 const HowScholerlyWorks = () => {
   const stepsStudent = [
@@ -57,7 +59,12 @@ const HowScholerlyWorks = () => {
         <div className="flex flex-col items-center md:items-start md:flex-row gap-8 ">
           {/* Student Icon + Title + Steps */}
           <div className="flex flex-col md:flex-row items-center md:items-start w-full  gap-8">
-            <LottieAnimation name="student" className="w-1/3 md:w-1/2" />
+          <div className='grid gap-2 justify-center items-center align-middle'>
+          <LottieAnimation name="student" className="w-1/3 md:w-1/2" />
+          <Link href="/signUp/as-student">  <Button buttontext='Sign Up  As Student ' >
+           
+          </Button> </Link>
+                </div>
             <div className="flex flex-col text-left w-full ">
               <h2 className="text-xl font-semibold mb-2">Join as a Student</h2>
               {/* Steps under the icon */}
@@ -80,8 +87,11 @@ const HowScholerlyWorks = () => {
             
           {/* Tutor Icon + Title + Steps */}
           <div className="flex flex-col md:flex-row-reverse items-center md:items-end w-full  gap-8">
+      
+            <div className='grid gap-2 justify-center items-center align-middle'>
             <LottieAnimation name="teacher" className="w-1/3 md:w-1/2" />
-
+       <Link href="/signUp/as-tutor">     <Button buttontext='Sign Up As Teacher' ></Button> </Link>
+</div>
          <div>
                <div className="flex flex-col text-right w-full ">
                
@@ -95,7 +105,9 @@ const HowScholerlyWorks = () => {
                     <h3 className="font-bold text-lg">{step.title}</h3>
                     <p className="text-gray-600">{step.desc}</p>
                   </div>
+
                 ))}
+               
               </div>
             </div>
          </div>
