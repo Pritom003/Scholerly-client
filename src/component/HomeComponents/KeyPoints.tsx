@@ -63,10 +63,10 @@ const KeyPoints = () => {
         <div data-aos="fade-right"
     data-aos-duration="2000" className="w-full lg:w-1/2 flex flex-col justify-between  lg:order-2 md:order-1">
           <div>
-            <SectionTitle text="About Us" />
-            <h2 className="text-3xl font-extrabold text-gray-800 mb-4">
+            <SectionTitle text="About Us" description=' 
               Empowering Education Everywhere
-            </h2>
+            ' />
+        
             <p  className="text-gray-500">
               We believe in a hybrid approach to learning, combining the flexibility of online
               education with the power of in-person tutoring. Our mission is to connect students

@@ -12,9 +12,12 @@ const HeroHome = () => {
     <div className="w-full  mb-10">
       {/* Top Section: Title + Contact Card */}
    <Container>
-   <div className="w-[90%] mx-auto flex flex-col lg:flex-row justify-between items-start gap-10 pt-12 ">
+   <div className="w-[90%] mx-auto flex flex-col
+    lg:flex-row justify-between  items-center align-middle
+    gap-10  ">
         {/* Left: Title + Description */}
-        <div className="flex-1  animate-fade-out fadeOut-animation"
+        <div className="flex-1  animate-fade-out
+         fadeOut-animation"
          data-aos="fade-right"
          data-aos-duration="1200" 
           data-aos-easing="ease-in-out"
@@ -35,7 +38,8 @@ const HeroHome = () => {
             Expert tutors<br />
             at your fingertips.
           </p>
-          <p className="text-gray-600 text-base md:text-lg">
+          <p className="text-gray-600 text-base
+          md:text-lg">
             Find the perfect tutor for your learning journey. Whether you’re looking for math help,
             language learning, or coding lessons — we’ve got you covered.
           </p>
@@ -49,7 +53,7 @@ const HeroHome = () => {
   data-aos-duration="2000"
 >
   <Card
-    className="shadow-xl lg:absolute w-72 md:w-96 pt-12 
+    className="shadow-xl lg:absolute w-72 md:w-96 
      h-96 lg:bottom-[-100px] lg:left-0"
     style={{ borderRadius: '16px' }}
   >
@@ -103,7 +107,8 @@ const HeroHome = () => {
    </Container>
 
 {/* Background Section with Scroll Reveal Effect */}
-<div data-aos="fade-up" data-aos-duration="2000" className="relative h-[70vh] w-full">
+<div data-aos="fade-up" data-aos-duration="2000"
+ className="relative h-[70vh] w-full">
         {/* Background Image */}
         <Image
           src={heroImage}
