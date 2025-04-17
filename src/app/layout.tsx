@@ -3,6 +3,7 @@ import {  Merriweather} from "next/font/google";
 import "./globals.css";
 import { ConfigProvider } from "antd";
 import { Toaster } from "sonner";
+import Providers from "@/providers/provider";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -30,11 +31,13 @@ export default function RootLayout({
       <body
         className={` ${merriweather.variable} antialiased bg-[#E3E3E5]`}
       >
-
+<Providers>
 <ConfigProvider>
 <Toaster richColors position="top-right" />
           {children}
         </ConfigProvider>
+</Providers>
+
       </body>
     </html>
   );

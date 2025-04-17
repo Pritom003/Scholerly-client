@@ -5,25 +5,36 @@ import { Button, Form } from "antd";
 import { toast } from "sonner";
 import InputField from "@/component/Shared/FormsharedFields/InpuField";
 import { loginUser } from "../Services/Authservices";
+import { useRouter, useSearchParams } from "next/navigation";
  // adjust path accordingly
 
 const SignInForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirectPath");
+  const router = useRouter();
 
   const onFinish = async (values: any) => {
+    console.log(values);
     setLoading(true);
     try {
-      const { result } = await loginUser(values);
-
+      const  result  = await loginUser(values);
+console.log(result);
       if ( result?.data?.accessToken) {
         toast.success("Logged in successfully!");
         console.log("Token:", result.accessToken);
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push("/");
+        }
         // You could store token here:
         // localStorage.setItem("token", result.accessToken);
         form.resetFields();
       } else {
         toast.error(result?.message || "Login failed. Check your credentials.");
+        console.log(result);
       }
     } catch (error: any) {
       console.error("Login error:", error);

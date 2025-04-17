@@ -1,3 +1,7 @@
+"use server";
+import { cookies } from "next/headers";
+import { jwtDecode } from "jwt-decode";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const registerUserWithFormData = async (formData: FormData) => {
     try {
@@ -9,7 +13,13 @@ export const registerUserWithFormData = async (formData: FormData) => {
       });
   
       const result = await res.json();
+      console.log(result);
+      if (result.success) {
+        (await cookies()).set("accessToken", result.data.accessToken);
+        (await cookies()).set("refreshToken", result?.data?.refreshToken);
+      }
       return result;
+      
     } catch (error: any) {
       console.error("Registration error:", error);
       return null;
@@ -28,11 +38,28 @@ export const loginUser = async (values: { email: string; password: string }) => 
     });
 
     const result = await response.json();
-    return { response, result };
+    console.log(result ,'from service ') ;
+    if (result?.success) {
+      (await cookies()).set("accessToken", result?.data?.accessToken);
+      // (await cookies()).set("refreshToken", result?.data?.refreshToken);
+    }
+
+    return result;
   } catch (error: any) {
     console.error("Login error:", error);
     return { response: null, result: null };
   }
 };
 
-  
+export const getCurrentUser = async () => {
+  const accessToken = (await cookies()).get("accessToken")?.value;
+  let decodedData = null;
+
+  if (accessToken) {
+    decodedData = await jwtDecode(accessToken);
+    console.log(decodedData);
+    return decodedData;
+  } else {
+    return null;
+  }
+};
