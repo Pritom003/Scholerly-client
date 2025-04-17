@@ -9,7 +9,7 @@ import TutorCard from "@/lib/TutorCard/TutorCard";
 const TutorsPage = async () => {
   const data = await getAllTutors("page=1&limit=10");
   const tutors = data?.data?.tutors || [];
-  console.log(tutors);
+
 
   return (
     <div className="">
