@@ -35,7 +35,8 @@ const TutorCard: React.FC<TutorCardProps> = ({
   const education = qualification ? `${qualification.degree}, ${qualification.institution}` : null;
 
   return (
-    <Card
+    <Card 
+    
       className="!p-0 !border-none shadow-md max-w-[400px] overflow-hidden rounded-xl"
       styles={{ body: { padding: 0 } }}
     >

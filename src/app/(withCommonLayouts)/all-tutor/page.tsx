@@ -16,7 +16,8 @@ const TutorsPage = async () => {
       <PageBanner title="All-Tutors" description="Find the tutor that match your preference"></PageBanner>
    
      <Container>
-     <div className="grid gap-6 md:grid-cols-3  ">
+     <div   data-aos="fade-up"
+            data-aos-duration="2000" className="grid gap-6 md:grid-cols-3  ">
         {tutors.map((tutor: any) => (
   <TutorCard
   key={tutor._id}
