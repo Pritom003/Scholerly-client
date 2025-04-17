@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // app/tutors/page.tsx
 import { getAllTutors } from "@/app/Services/TutorServices";
+import PageBanner from "@/component/PageBanner/PageBanner";
+import Container from "@/component/Shared/Container/Container";
 import TutorCard from "@/lib/TutorCard/TutorCard";
 // import TutorCard from "@/components/TutorCard"; // Adjust this path as needed
 
@@ -10,19 +12,26 @@ const TutorsPage = async () => {
   console.log(tutors);
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">All Tutors</h2>
-      <div className="grid gap-6">
+    <div className="">
+      <PageBanner title="All-Tutors" description="Find the tutor that match your preference"></PageBanner>
+   
+     <Container>
+     <div className="grid gap-6 md:grid-cols-3  ">
         {tutors.map((tutor: any) => (
-          <TutorCard
-            key={tutor._id}
-            name={`${tutor.name?.firstname || ""} ${tutor.name?.lastname || ""}`}
-            image={tutor.image || "/default-avatar.png"} // fallback image
-            rating={tutor.rating || 0}
-            totalBookings={tutor.totalBookings || 0}
-          />
+  <TutorCard
+  key={tutor._id}
+  id={tutor._id}
+  name={tutor.name}
+  image={tutor.profileImage}
+  rating={tutor.rating}
+  hourlyRate={tutor.hourlyRate}
+  location={tutor.location}
+  qualifications={tutor.qualifications}
+/>
+
         ))}
       </div>
+     </Container>
     </div>
   );
 };

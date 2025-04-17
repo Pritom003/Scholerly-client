@@ -8,7 +8,7 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
     <AosInitializer/>
       <Navbar />
       
-      <main className="min-h-screen  ">{children}</main>
+      <main className="min-h-screen bg-[#E3E3E5] ">{children}</main>
       <Footer/>
     </>
   );
