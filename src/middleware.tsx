@@ -5,10 +5,8 @@ import { getCurrentUser } from "./app/Services/Authservices";
 
 
 const roleBasedPrivateRoutes = {
-  // Students are allowed to access routes like '/all-tutor' or '/student'
-  student: [/^\/all-tutor/, /^\/student/],
-  // Tutors are allowed to access routes like '/tutor' or pages like '/create-shop'
-  tutor: [/^\/tutor/, /^\/create-shop/],
+  student: [/^\/student/, /^\/all-tutor/],
+  tutor: [/^\/tutor/, /^\/all-tutor/],
   // Admins are allowed to access any route beginning with '/admin'
   admin: [/^\/admin/],
 };

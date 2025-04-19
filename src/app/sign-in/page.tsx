@@ -23,7 +23,7 @@ const SignInForm = () => {
 console.log(result);
       if ( result?.data?.accessToken) {
         toast.success("Logged in successfully!");
-        console.log("Token:", result.accessToken);
+        // console.log("Token:", result.accessToken);
         if (redirect) {
           router.push(redirect);
         } else {

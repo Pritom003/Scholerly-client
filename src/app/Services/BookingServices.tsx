@@ -1,3 +1,4 @@
+import { getValidToken } from "@/lib/varifyToken";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const baseURL = "http://localhost:5000/api/v1";
@@ -62,14 +63,15 @@ export const updateBookingStatus = async (
 export const updateBookingPayment = async (
   id: string,
   paymentData: any,
-  token: string
+
 ) => {
   try {
+    const token =await getValidToken()
     const res = await fetch(`${baseURL}/payment/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: ` ${token}`,
       },
       body: JSON.stringify(paymentData),
     });
@@ -81,20 +83,27 @@ export const updateBookingPayment = async (
 };
 
 // Get all bookings for a student
-export const getStudentBookings = async (studentId: string, token: string) => {
+export const getStudentBookings = async (studentId: string) => {
+
   try {
-    const res = await fetch(`${baseURL}/student/${studentId}`, {
+    const token =await getValidToken()
+    const res = await fetch(`http://localhost:5000/api/v1/student/${studentId}`, {
+     
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        
+        Authorization: `${token}`,
       },
+      cache: "no-store",
     });
+    console.log(token ,'token');
     return await res.json();
   } catch (error: any) {
     console.error("Error fetching student bookings:", error);
     return null;
   }
 };
+
 
 // Get all bookings for a tutor
 export const getTutorBookings = async (tutorId: string, token: string) => {

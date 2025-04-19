@@ -13,7 +13,7 @@ export const registerUserWithFormData = async (formData: FormData) => {
       });
   
       const result = await res.json();
-      console.log(result);
+      // console.log(result);
       if (result.success) {
         (await cookies()).set("accessToken", result.data.accessToken);
         (await cookies()).set("refreshToken", result?.data?.refreshToken);
@@ -38,7 +38,7 @@ export const loginUser = async (values: { email: string; password: string }) => 
     });
 
     const result = await response.json();
-    console.log(result ,'from service ') ;
+    // console.log(result ,'from service ') ;
     if (result?.success) {
       (await cookies()).set("accessToken", result?.data?.accessToken);
       // (await cookies()).set("refreshToken", result?.data?.refreshToken);
@@ -61,5 +61,23 @@ export const getCurrentUser = async () => {
     return decodedData;
   } else {
     return null;
+  }
+};
+export const getNewToken = async () => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/auth/refresh-token`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: (await cookies()).get("refreshToken")!.value,
+        },
+      }
+    );
+
+    return res.json();
+  } catch (error: any) {
+    return Error(error);
   }
 };

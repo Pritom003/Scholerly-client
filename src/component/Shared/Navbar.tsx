@@ -1,12 +1,14 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Dropdown } from 'antd'
-import { ShoppingCartOutlined, UserOutlined, MenuOutlined } from '@ant-design/icons'
+import { Badge, Dropdown } from 'antd'
+import { ShoppingCartOutlined, UserOutlined, MenuOutlined, BellOutlined } from '@ant-design/icons'
 import Logo from '../../../public/logo-2withbg.png'
+import { useUser } from '@/context/useContext'
+import socket from '@/utils/socket'
 
 const pages = [
   { label: 'Home', href: '/' },
@@ -19,6 +21,40 @@ const pages = [
 const Navbar = () => {
   const pathname = usePathname()
 
+  const { user } = useUser();
+
+  const [notifications, setNotifications] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    socket.emit("joinRoom", user.id);
+
+    socket.on("newBooking", (data) => {
+      console.log('new');
+      setNotifications((prev) => [`📩 ${data?.message || "New booking received!"}`, ...prev]);
+    });
+
+    socket.on("bookingUpdated", (data) => {
+      console.log('approved');
+      setNotifications((prev) => [` ${data?.message || "Booking status updated"}`, ...prev]);
+    });
+
+    return () => {
+      socket.off("newBooking");
+      socket.off("bookingUpdated");
+    };
+  }, [user?.id]);
+  const notificationItems = notifications.length > 0 
+  ? notifications.map((notif, idx) => ({
+      key: idx,
+      label: <span>{notif}</span>,
+    }))
+  : [{
+      key: 'no-notifications',
+      label: <span className="text-gray-400">No notifications</span>,
+    }];
+
   return (
     <header className="w-full  top-0 z-50 bg-[#E3E3E5] ">
       <div className="w-[80%] mx-auto flex items-center justify-between h-16">
@@ -30,7 +66,18 @@ const Navbar = () => {
         </div>
 
         {/* Center: Cart & Profile */}
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex items-center space-x-4 text-black">
+ {/* 🔔 Bell icon */}
+ <Dropdown
+   menu={{ items: notificationItems }}
+   trigger={["click"]}
+   placement="bottomRight"
+   getPopupContainer={(triggerNode) => triggerNode.parentNode as HTMLElement}
+ >
+   <Badge count={notifications.length} size="small" offset={[0, 0]}>
+     <BellOutlined className="text-xl hover:text-blue-500 cursor-pointer" />
+   </Badge>
+ </Dropdown>
           <Link href="/cart">
             <ShoppingCartOutlined className="text-xl hover:text-blue-500" />
           </Link>

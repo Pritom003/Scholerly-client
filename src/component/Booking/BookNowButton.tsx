@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { bookTutor } from "@/app/actions/booktutor";
@@ -9,7 +10,7 @@ type BookNowButtonProps = {
   tutor: any;
 };
 
-export default function BookNowButton({ tutor }: BookNowButtonProps) {
+export default function  BookNowButton({ tutor }: BookNowButtonProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleBooking = () => {

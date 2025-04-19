@@ -21,7 +21,7 @@ export async function bookTutor(tutor: any) {
   // Construct the booking data payload
   const bookingData: any = {
     student: currentUser.id,
-    tutor: tutor._id,
+    tutor: tutor.user,
     subject:
       Array.isArray(tutor.subjects) && tutor.subjects.length > 0
         ? tutor.subjects[0]

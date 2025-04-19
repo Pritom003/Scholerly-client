@@ -13,18 +13,16 @@ type Params = {
   };
 };
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const tutor = await getSingleTutor(params.id);
-
+export function generateMetadata() {
   return {
-    title: tutor?.data?.name || "Tutor Details",
-    description: tutor?.data?.bio || "Details about the selected tutor",
+    title: "Tutor Details",
+    description: "Details about the selected tutor",
   };
 }
 
 const TutorDetailsPage = async ({ params }: Params) => {
-  const id = params.id;
-  const tutordata = await getSingleTutor(id);
+  const { id } =  await params;
+  const tutordata = await getSingleTutor( id);
   const tutor = tutordata?.data;
 
   if (!tutor) {

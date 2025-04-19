@@ -4,6 +4,7 @@ import "./globals.css";
 import { ConfigProvider } from "antd";
 import { Toaster } from "sonner";
 import Providers from "@/providers/provider";
+import NotificationListener from "@/context/NotificationListener";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
 <Providers>
 <ConfigProvider>
 <Toaster richColors position="top-right" />
+<NotificationListener />
           {children}
         </ConfigProvider>
 </Providers>
