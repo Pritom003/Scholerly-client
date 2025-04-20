@@ -12,14 +12,14 @@ const { Sider } = Layout;
 
 const Sidebar = ({ collapsed }: { collapsed: boolean }) => {
   const { user } = useUser();
-
+console.log(user);
   // Choose routes based on user role
-  let routesToRender = [];
+  let routesToRender: Array<{ key: string; icon: React.ReactNode; href: string; label: string }> = [];
   if (user?.role === "tutor") {
     routesToRender = tutorRoutes;
   } else if (user?.role === "admin") {
     routesToRender = adminRoutes;
-  } else {
+  } else if (user?.role === "student") {
     routesToRender = studentRoutes;
   }
 
@@ -34,13 +34,16 @@ const Sidebar = ({ collapsed }: { collapsed: boolean }) => {
       <div className="p-4 text-center font-bold text-xl">
         <Image src={logoWith} alt="logoimg" height={50} width={50} />
       </div>
-      <Menu mode="inline" defaultSelectedKeys={["dashboard"]}>
-        {routesToRender.map((item) => (
-          <Menu.Item key={item.key} icon={item.icon}>
-            <Link href={item.href}>{item.label}</Link>
-          </Menu.Item>
-        ))}
-      </Menu>
+      <Menu
+  mode="inline"
+  defaultSelectedKeys={["dashboard"]}
+  items={routesToRender.map((item) => ({
+    key: item.key,
+    icon: item.icon,
+    label: <Link href={item.href}>{item.label}</Link>,
+  }))}
+/>
+
     </Sider>
   );
 };

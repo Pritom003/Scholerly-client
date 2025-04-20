@@ -11,10 +11,12 @@
   "dependencies": {
     "antd": "^5.24.7",
     "aos": "^2.3.4",
+    "cookies-next": "^5.1.0",
     "jwt-decode": "^4.0.0",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.488.0",
     "next": "15.3.0",
+    "next-auth": "^4.24.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "socket.io-client": "^4.8.1",

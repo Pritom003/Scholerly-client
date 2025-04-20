@@ -8,7 +8,7 @@ const roleBasedPrivateRoutes = {
   student: [/^\/student/, /^\/all-tutor/],
   tutor: [/^\/tutor/, /^\/all-tutor/],
   // Admins are allowed to access any route beginning with '/admin'
-  admin: [/^\/admin/],
+  admin: [/^\/admin/,/^\/all-tutor/],
 };
 
 

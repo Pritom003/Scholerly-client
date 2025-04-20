@@ -1,8 +1,9 @@
 "use client"; // this one **can optionally be client** if needed for dropdowns or user
 
-import { Layout, Avatar, Dropdown, Badge } from "antd";
-import { MenuUnfoldOutlined, MenuFoldOutlined, BellOutlined } from "@ant-design/icons";
+import { Layout, Avatar, Dropdown } from "antd";
+import { MenuUnfoldOutlined, MenuFoldOutlined} from "@ant-design/icons";
 import { useUser } from "@/context/useContext";
+import NotificationBell from "../Notification/NotificationBell";
 
 const { Header } = Layout;
 
@@ -21,9 +22,7 @@ const HeaderBar = ({
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </div>
       <div className="flex items-center gap-4">
-        <Badge count={3}>
-          <BellOutlined className="text-xl cursor-pointer" />
-        </Badge>
+   <NotificationBell></NotificationBell>
         <Dropdown
           menu={{
             items: [

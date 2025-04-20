@@ -5,6 +5,7 @@ import AvailabilityGrid from "./Available";
 import Image from "next/image";
 import Container from "@/component/Shared/Container/Container";
 import BookNowButton from "@/component/Booking/BookNowButton";
+import ReviewFunc from "@/component/Review/Review";
 // import BookNowButton from "@/components/BookNowButton"; // Import the client component
 
 type Params = {
@@ -30,7 +31,8 @@ const TutorDetailsPage = async ({ params }: Params) => {
   }
 
   return (
-    <div className="p-6">
+    <div className="grid grid-cols-1  lg:grid-cols-4">
+      <div className="p-6 lg:col-span-3  ">
       <PageBanner title={tutor.name} description={`Profile of ${tutor.name}`} />
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -87,6 +89,10 @@ const TutorDetailsPage = async ({ params }: Params) => {
           </div>
         </div>
       </Container>
+    </div>
+    <div className="p-8 flex justify-center align-middle items-center mt-20 border-t-2 lg:border-l-1 border-amber-50">
+      <ReviewFunc tutorId={id}></ReviewFunc>
+    </div>
     </div>
   );
 };

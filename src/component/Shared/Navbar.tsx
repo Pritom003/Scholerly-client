@@ -1,62 +1,48 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Badge, Dropdown } from 'antd'
-import { ShoppingCartOutlined, UserOutlined, MenuOutlined, BellOutlined } from '@ant-design/icons'
+import { Dropdown, Button } from 'antd'
+import { ShoppingCartOutlined, UserOutlined, MenuOutlined } from '@ant-design/icons'
 import Logo from '../../../public/logo-2withbg.png'
-import { useUser } from '@/context/useContext'
-import socket from '@/utils/socket'
+import NotificationBell from '../Notification/NotificationBell'
+// adjust the path as needed
+import { deleteCookie } from 'cookies-next' // use this if you want to handle client-side cookies
+import { getCurrentUser } from '@/app/Services/Authservices'
 
 const pages = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'All Tutors', href: '/all-tutor' },
-  { label: 'Bookings', href: '/bookings' },
   { label: 'Contact', href: '/contact' },
 ]
 
 const Navbar = () => {
   const pathname = usePathname()
 
-  const { user } = useUser();
 
-  const [notifications, setNotifications] = useState<string[]>([]);
+  const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
-    if (!user?.id) return;
+    const fetchUser = async () => {
+      const currentUser = await getCurrentUser()
+      setUser(currentUser)
+    }
+    fetchUser()
+  }, [])
 
-    socket.emit("joinRoom", user.id);
-
-    socket.on("newBooking", (data) => {
-      console.log('new');
-      setNotifications((prev) => [`📩 ${data?.message || "New booking received!"}`, ...prev]);
-    });
-
-    socket.on("bookingUpdated", (data) => {
-      console.log('approved');
-      setNotifications((prev) => [` ${data?.message || "Booking status updated"}`, ...prev]);
-    });
-
-    return () => {
-      socket.off("newBooking");
-      socket.off("bookingUpdated");
-    };
-  }, [user?.id]);
-  const notificationItems = notifications.length > 0 
-  ? notifications.map((notif, idx) => ({
-      key: idx,
-      label: <span>{notif}</span>,
-    }))
-  : [{
-      key: 'no-notifications',
-      label: <span className="text-gray-400">No notifications</span>,
-    }];
+  const handleLogout = () => {
+    deleteCookie('accessToken')
+    deleteCookie('refreshToken')
+    setUser(null)
+   
+  }
 
   return (
-    <header className="w-full  top-0 z-50 bg-[#E3E3E5] ">
+    <header className="w-full top-0 z-50 bg-[#E3E3E5]">
       <div className="w-[80%] mx-auto flex items-center justify-between h-16">
         {/* Left: Logo */}
         <div className="flex-shrink-0">
@@ -67,17 +53,7 @@ const Navbar = () => {
 
         {/* Center: Cart & Profile */}
         <div className="hidden md:flex items-center space-x-4 text-black">
- {/* 🔔 Bell icon */}
- <Dropdown
-   menu={{ items: notificationItems }}
-   trigger={["click"]}
-   placement="bottomRight"
-   getPopupContainer={(triggerNode) => triggerNode.parentNode as HTMLElement}
- >
-   <Badge count={notifications.length} size="small" offset={[0, 0]}>
-     <BellOutlined className="text-xl hover:text-blue-500 cursor-pointer" />
-   </Badge>
- </Dropdown>
+          <NotificationBell />
           <Link href="/cart">
             <ShoppingCartOutlined className="text-xl hover:text-blue-500" />
           </Link>
@@ -87,7 +63,7 @@ const Navbar = () => {
         </div>
 
         {/* Right: Nav Links */}
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex items-center space-x-4">
           {pages.map(({ label, href }) => (
             <Link
               key={label}
@@ -100,6 +76,16 @@ const Navbar = () => {
               {label}
             </Link>
           ))}
+
+          {user ? (
+            <Button onClick={handleLogout} danger>
+              Logout
+            </Button>
+          ) : (
+            <Link href="/sign-in">
+              <Button type="primary">Login</Button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Dropdown */}
@@ -112,33 +98,29 @@ const Navbar = () => {
                   key: href,
                   label: <Link href={href}>{label}</Link>,
                 })),
-                {
-                  type: 'divider',
-                },
-                {
-                  key: 'cart',
-                  label: <Link href="/cart">Cart</Link>,
-                },
-                {
-                  key: 'profile',
-                  label: <Link href="/profile">Profile</Link>,
-                },
+                { type: 'divider' },
+                { key: 'cart', label: <Link href="/cart">Cart</Link> },
+                { key: 'profile', label: <Link href="/profile">Profile</Link> },
+                { type: 'divider' },
+                user
+                  ? {
+                      key: 'logout',
+                      label: <span onClick={handleLogout}>Logout</span>,
+                    }
+                  : {
+                      key: 'signIn',
+                      label: <Link href="/sign-in">Login</Link>,
+                    },
               ],
             }}
           >
             <MenuOutlined className="text-xl cursor-pointer" />
           </Dropdown>
         </div>
-      
       </div>
 
-    <hr     
-        data-aos="fade-left"
-        data-aos-duration="1200" className='text-amber-950 w-[90%] mx-auto'/>
-    <hr     
-        data-aos="fade-right"
-        data-aos-duration="1200" className='text-amber-50 w-[90%] mx-auto'/>
- 
+      <hr data-aos="fade-left" data-aos-duration="1200" className="text-amber-950 w-[90%] mx-auto" />
+      <hr data-aos="fade-right" data-aos-duration="1200" className="text-amber-50 w-[90%] mx-auto" />
     </header>
   )
 }

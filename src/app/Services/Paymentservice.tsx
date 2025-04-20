@@ -40,3 +40,18 @@ export const verifyPayment = async (bookingId: string) => {
     return null;
   }
 };
+export const getPaymentHistory = async () => {
+  try {
+    const token = await getValidToken();
+    const res = await fetch(`${baseURL}/payment-history`, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+
+    return await res.json();
+  } catch (error) {
+    console.error("Failed to fetch payment history", error);
+    return null;
+  }
+};

@@ -4,13 +4,14 @@ import { getValidToken } from "@/lib/varifyToken";
 const baseURL = "http://localhost:5000/api/v1";
 
 // Create a new booking
-export const createBooking = async (payload: any, token: string) => {
+export const createBooking = async (payload: any) => {
   try {
+    const token =await getValidToken()
     const res = await fetch(`${baseURL}/book-tutor`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: ` ${token}`,
       },
       body: JSON.stringify(payload),
     });
@@ -22,12 +23,13 @@ export const createBooking = async (payload: any, token: string) => {
 };
 
 // Get a booking by ID
-export const getBookingById = async (id: string, token: string) => {
+export const getBookingById = async (id: string) => {
   try {
+    const token =await getValidToken()
     const res = await fetch(`${baseURL}/${id}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: ` ${token}`,
       },
     });
     return await res.json();
@@ -41,14 +43,15 @@ export const getBookingById = async (id: string, token: string) => {
 export const updateBookingStatus = async (
   id: string,
   status: string,
-  token: string
+
 ) => {
   try {
+    const token =await getValidToken()
     const res = await fetch(`${baseURL}/status/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: ` ${token}`,
       },
       body: JSON.stringify({ status }),
     });
@@ -82,6 +85,26 @@ export const updateBookingPayment = async (
   }
 };
 
+
+ // Adjust based on your actual location
+
+export const getAllBookings = async () => {
+  try {
+    const token = await getValidToken();
+    const res = await fetch(`http://localhost:5000/api/v1/all`, {
+      method: 'GET',
+      headers: {
+        Authorization: `${token}`,
+      },
+      cache: 'no-store',
+    });
+    return await res.json();
+  } catch (error) {
+    console.error("Error fetching all bookings:", error);
+    return null;
+  }
+};
+
 // Get all bookings for a student
 export const getStudentBookings = async (studentId: string) => {
 
@@ -111,7 +134,7 @@ export const getTutorBookings = async (tutorId: string, token: string) => {
     const res = await fetch(`${baseURL}/tutor/${tutorId}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: ` ${token}`,
       },
     });
     return await res.json();

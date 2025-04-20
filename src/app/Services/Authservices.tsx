@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
+import { getValidToken } from "@/lib/varifyToken";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const registerUserWithFormData = async (formData: FormData) => {
@@ -41,7 +43,7 @@ export const loginUser = async (values: { email: string; password: string }) => 
     // console.log(result ,'from service ') ;
     if (result?.success) {
       (await cookies()).set("accessToken", result?.data?.accessToken);
-      // (await cookies()).set("refreshToken", result?.data?.refreshToken);
+      (await cookies()).set("refreshToken", result?.data?.refreshToken);
     }
 
     return result;
@@ -80,4 +82,88 @@ export const getNewToken = async () => {
   } catch (error: any) {
     return Error(error);
   }
+};
+
+export const getUserProfile = async () => {
+  try {
+    const token = await getValidToken();
+    const res = await fetch("http://localhost:5000/api/v1/auth/profile", {
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+      },
+      cache: "no-store",
+    });
+
+    return await res.json();
+  } catch (err) {
+    return null;
+  }
+};
+
+export const updateUserProfile = async (formData: FormData) => {
+  try { const token = await getValidToken();
+    const res = await fetch("http://localhost:5000/api/v1/auth/profile", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+
+    return await res.json();
+  } catch (err) {
+    console.error("Profile update error:", err);
+    return null;
+  }
+};
+
+
+export const getAllUsers = async () => {
+  const token = await getValidToken();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth`, {
+    headers: { Authorization: token },
+    cache: "no-store",
+  });
+  return await res.json();
+};
+
+export const deleteUser = async (id: string) => {
+  const token = await getValidToken();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/${id}`, {
+    method: 'DELETE',
+    headers: { Authorization: token },
+  });
+  return await res.json();
+};
+
+export const blockUser = async (id: string) => {
+  const token = await getValidToken();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/block-user/${id}`, {
+    method: 'PATCH',
+    headers: { Authorization: token },
+  });
+  return await res.json();
+};
+
+export const makeAdmin = async (id: string) => {
+  const token = await getValidToken();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/make-admin/${id}`, {
+    method: 'PATCH',
+    headers: { Authorization: token },
+  });
+  return await res.json();
+};
+export const approve = async (id: string, status: "accepted" | "rejected") => {
+  const token = await getValidToken();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/approve-tutor/${id}`, {
+    method: "PATCH",
+    headers: {
+      Authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status }), // send status
+  });
+
+  return await res.json();
 };

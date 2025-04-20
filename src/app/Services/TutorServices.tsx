@@ -1,3 +1,5 @@
+import { getValidToken } from "@/lib/varifyToken";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const baseURL = "http://localhost:5000/api/v1/tutor";
 
@@ -58,13 +60,13 @@ export const updateTutorProfile = async (
 };
 
 // Approve tutor request (admin only)
-export const approveTutorRequest = async (
+export const handleTutorRequest = async (
   id: string,
   approvalData: any,
-  token: string
+
 ) => {
-  try {
-    const res = await fetch(`${baseURL}/approve/${id}`, {
+  try {  const token = await getValidToken();
+    const res = await fetch(`${baseURL}/request/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

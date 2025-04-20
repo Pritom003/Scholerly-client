@@ -3,10 +3,11 @@ import {
     BookOutlined,
     UserOutlined,
     HomeOutlined,
-    BarChartOutlined,
+ 
     DollarOutlined,
     CheckCircleOutlined,
   } from "@ant-design/icons";
+import { GroupIcon } from "lucide-react";
   
   export const tutorRoutes = [
     {
@@ -19,7 +20,7 @@ import {
       key: "tutor-profile",
       label: "Profile",
       icon: <UserOutlined />,
-      href: "/dashboard/tutor/profile",
+      href: "/dashboard/profile",
     },
     {
       key: "tutor-bookings",
@@ -40,7 +41,7 @@ import {
       key: "student-profile",
       label: "Profile",
       icon: <UserOutlined />,
-      href: "/dashboard/student/profile",
+      href: "/dashboard/profile",
     },
     {
       key: "student-bookings",
@@ -52,7 +53,7 @@ import {
       key: "student-payments",
       label: "Payment History",
       icon: <DollarOutlined />,
-      href: "/dashboard/payment-history",
+      href: "/dashboard/student/payment-history",
     },
   ];
   
@@ -67,31 +68,37 @@ import {
       key: "admin-profile",
       label: "Profile",
       icon: <UserOutlined />,
-      href: "/dashboard/admin/profile",
+      href: "/dashboard/profile",
     },
-    {
-      key: "admin-stats",
-      label: "Statistics",
-      icon: <BarChartOutlined />,
-      href: "/dashboard/admin/stats",
-    },
-    {
-      key: "admin-payments",
-      label: "Payment History",
-      icon: <DollarOutlined />,
-      href: "/dashboard/admin/payment-history",
-    },
+    // {
+    //   key: "admin-stats",
+    //   label: "Statistics",
+    //   icon: <BarChartOutlined />,
+    //   href: "/dashboard/admin/stats",
+    // },
+    // {
+    //   key: "admin-payments",
+    //   label: "Payment History",
+    //   icon: <DollarOutlined />,
+    //   href: "/dashboard/admin/payment-history",
+    // },
     {
       key: "admin-bookings",
       label: "Bookings",
       icon: <BookOutlined />,
-      href: "/dashboard/admin/bookings",
+      href: "/dashboard/admin/bookings-history",
     },
     {
       key: "admin-approve-tutor",
       label: "Approve Tutors",
       icon: <CheckCircleOutlined />,
-      href: "/dashboard/admin/aprove-tutor",
+      href: "/dashboard/admin/tutor-request",
+    },
+    {
+      key: "All-users",
+      label: "All Users",
+      icon: <GroupIcon/>,
+      href: "/dashboard/admin/all-users-list",
     },
   ];
   

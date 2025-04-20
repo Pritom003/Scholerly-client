@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
+import { getNewToken } from "@/app/Services/Authservices";
 // import { getNewToken } from "@/app/Services/Authservices";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
@@ -21,13 +22,13 @@ export const isTokenExpired = async (token: string): Promise<boolean> => {
 export const getValidToken = async (): Promise<string> => {
   const cookieStore = await cookies();
 
-  const token = cookieStore.get("accessToken")!.value;
+let token = cookieStore.get("accessToken")!.value;
 
-//   if (!token || (await isTokenExpired(token))) {
-//     const { data } = await getNewToken();
-//     token = data?.accessToken;
-//     cookieStore.set("accessToken", token);
-//   }
+  if (!token || (await isTokenExpired(token))) {
+    const { data } = await getNewToken();
+    token = data?.accessToken;
+    cookieStore.set("accessToken", token);
+  }
 
   return token;
 };
