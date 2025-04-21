@@ -37,6 +37,19 @@ export const getReviewsByTutorId = async (tutorId: string) => {
     return null;
   }
 };
+export const getAllreviws= async (queryParams:string) => {
+  try {
+    const res = await fetch(`${baseURL}?${queryParams}`, {
+      method: "GET",
+      cache: "no-store",//i want to store it 
+    });
+
+    return await res.json();
+  } catch (error: any) {
+    console.error("Error fetching reviews:", error);
+    return null;
+  }
+};
 
 // 👉 Delete a review
 export const deleteReview = async (reviewId: string) => {

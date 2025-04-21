@@ -46,7 +46,7 @@ const HowScholerlyWorks = () => {
 
   return (
     <Container>
-      <div className="px-4 md:px-20 py-10 my-10">
+      <div className="px-4 md:px-20 py-10 mt-10">
         {/* Title */}
     <div className='grid justify-center align-middle items-center'>
     <div data-aos="fade-left"

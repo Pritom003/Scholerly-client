@@ -103,7 +103,7 @@ console.log(data);
       {reviews.map((review) => (
         <div key={review._id} className="flex items-start gap-4 border p-3 rounded">
           <Image
-            src={review?.userId.Profileimage|| "/default-avatar.png"}
+            src={review?.userId.Profileimage|| "https://res.cloudinary.com/dkal4qazy/image/upload/v1744812682/profile_1744812678684.png"}
             alt={review.userId.name}
             width={40}
             height={40}
