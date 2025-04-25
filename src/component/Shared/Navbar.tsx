@@ -1,39 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Dropdown, Button } from 'antd'
-import { ShoppingCartOutlined, UserOutlined, MenuOutlined } from '@ant-design/icons'
+import { Dropdown} from 'antd'
+import {  MenuOutlined } from '@ant-design/icons'
 import Logo from '../../../public/logo-2withbg.png'
 import NotificationBell from '../Notification/NotificationBell'
 // adjust the path as needed
-import { deleteCookie } from 'cookies-next' // use this if you want to handle client-side cookies
-import { getCurrentUser } from '@/app/Services/Authservices'
+import { deleteCookie } from 'cookies-next' 
+
+import { useUser } from '@/context/useContext'
 
 const pages = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'All Tutors', href: '/all-tutor' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Blog', href: '/blog-page' },
+  
 ]
 
 const Navbar = () => {
   const pathname = usePathname()
 
 
-  const [user, setUser] = useState<any>(null)
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await getCurrentUser()
-      setUser(currentUser)
-    }
-    fetchUser()
-  }, [])
-
+const {user ,setUser ,isLoading }=useUser()
+// console.log(user);
   const handleLogout = () => {
     deleteCookie('accessToken')
     deleteCookie('refreshToken')
@@ -52,44 +46,110 @@ const Navbar = () => {
         </div>
 
         {/* Center: Cart & Profile */}
-        <div className="hidden md:flex items-center space-x-4 text-black">
+        <div className="hidden md:flex gap-4 items-center space-x-4 text-black">
           <NotificationBell />
-          <Link href="/cart">
-            <ShoppingCartOutlined className="text-xl hover:text-blue-500" />
-          </Link>
-          <Link href="/profile">
-            <UserOutlined className="text-xl hover:text-blue-500" />
-          </Link>
+{
+  isLoading ? ".." :(
+    user && !isLoading ? (
+      <Dropdown
+        trigger={['hover']}
+        menu={{
+          items: [
+            {
+              key: 'logout',
+              label: <span onClick={handleLogout}>Logout</span>,
+            },
+          ],
+        }}
+      >
+        <div className="cursor-pointer">
+          <Image
+            src={user?.image || 'https://res.cloudinary.com/dkal4qazy/image/upload/v1744812682/profile_1744812678684.png'}
+            alt="User Avatar"
+            width={60}
+            height={100}
+            className="!rounded-full border-2  !w-8 !h-8
+             border-[#815606]"
+          />
+        </div>
+      </Dropdown>
+    ) : ''
+  )
+}
         </div>
 
         {/* Right: Nav Links */}
         <div className="hidden md:flex items-center space-x-4">
+         
           {pages.map(({ label, href }) => (
             <Link
               key={label}
               href={href}
               className={`relative text-base font-medium transition-all duration-200
-                ${pathname === href ? 'text-blue-600' : 'text-gray-800'}
-                hover:text-blue-600
-                after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-blue-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left`}
+                ${pathname === href ? 'text-[#815606]' : 'text-gray-800'}
+                hover:text-[#815606]
+                after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#815606] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left`}
             >
               {label}
             </Link>
+            
           ))}
+{
+  user?     <Link
+  
+  href='/dashboard/profile'
+  className={`relative text-base font-medium transition-all duration-200
+  
+    hover:text-[#815606]
+    after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#815606] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left`}
+>
+Dashboard
+</Link>:  <Link
+        href="/sign-in"
+        className={`relative text-base font-medium transition-all duration-200
+    
+          hover:text-[#815606]
+          after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#815606] after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left`}
+      >
+        Login
+      </Link>
+}
 
-          {user ? (
-            <Button onClick={handleLogout} danger>
-              Logout
-            </Button>
-          ) : (
-            <Link href="/sign-in">
-              <Button type="primary">Login</Button>
-            </Link>
-          )}
         </div>
 
         {/* Mobile Dropdown */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center space-x-4">
+        <div className="flex items-center gap-4 space-x-4 text-black">
+          <NotificationBell />
+{
+  isLoading? ".." :(
+    user && !isLoading ? (
+      <Dropdown
+        trigger={['hover']}
+        menu={{
+          items: [
+            {
+              key: 'logout',
+              label: <span onClick={handleLogout}>Logout</span>,
+            },
+          ],
+        }}
+      >
+        <div className="cursor-pointer">
+          <Image
+            src={user?.image || 'https://res.cloudinary.com/dkal4qazy/image/upload/v1744812682/profile_1744812678684.png'}
+            alt="User Avatar"
+         height={20}
+         width={20}
+            className="!rounded-full border-2  !w-8 !h-8
+             border-[#815606]"
+          />
+        </div>
+      </Dropdown>
+    ) :''
+  )
+}
+        </div>
           <Dropdown
             trigger={['click']}
             menu={{
@@ -99,18 +159,8 @@ const Navbar = () => {
                   label: <Link href={href}>{label}</Link>,
                 })),
                 { type: 'divider' },
-                { key: 'cart', label: <Link href="/cart">Cart</Link> },
-                { key: 'profile', label: <Link href="/profile">Profile</Link> },
-                { type: 'divider' },
-                user
-                  ? {
-                      key: 'logout',
-                      label: <span onClick={handleLogout}>Logout</span>,
-                    }
-                  : {
-                      key: 'signIn',
-                      label: <Link href="/sign-in">Login</Link>,
-                    },
+               
+               
               ],
             }}
           >

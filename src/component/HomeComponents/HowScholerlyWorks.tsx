@@ -1,11 +1,18 @@
+'use client';
 import React from 'react';
 import SectionTitle from '../Shared/SectionTitle';
 import Container from '../Shared/Container/Container';
-import LottieAnimation from '../Shared/animation/LottieAnimation';
+// import LottieAnimation from '../Shared/animation/LottieAnimation';
 import Button from '@/lib/Buttons/Button';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 const HowScholerlyWorks = () => {
+  
+const LottieAnimation = dynamic
+(() => import('../Shared/animation/LottieAnimation'), {
+  ssr: false,
+});
   const stepsStudent = [
     {
       title: '1 — Register as Student',

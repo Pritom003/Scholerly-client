@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import { Card } from "antd";
 import Image from "next/image";
@@ -51,9 +52,9 @@ const TutorCard: React.FC<TutorCardProps> = ({
         </div>
 
         {/* White section */}
-        <div className="w-5/6 bg-[#f7f7fa] px-2  relative z-10 flex flex-col justify-center">
+        <div className="w-5/6 bg-[#f7f7fa] px-2  relative z-10 py-2 flex flex-col justify-center">
          <div className="pl-12">
-         <h2 className="text-lg font-semibold">{name}</h2>
+         <h2 className="text-lg font-semibold pt-2">{name}</h2>
 
      
 

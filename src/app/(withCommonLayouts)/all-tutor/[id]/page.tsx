@@ -1,34 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getSingleTutor } from "@/app/Services/TutorServices";
 import PageBanner from "@/component/PageBanner/PageBanner";
-import AvailabilityGrid from "./Available";
+// import AvailabilityGrid from "./Available";
 import Image from "next/image";
 import Container from "@/component/Shared/Container/Container";
 import BookNowButton from "@/component/Booking/BookNowButton";
 import ReviewFunc from "@/component/Review/Review";
+import AvailabilityGrid from "@/component/Available";
 // import BookNowButton from "@/components/BookNowButton"; // Import the client component
 
-type Params = {
+type PageProps = {
   params: {
     id: string;
   };
 };
 
-export function generateMetadata() {
-  return {
-    title: "Tutor Details",
-    description: "Details about the selected tutor",
-  };
-}
+const TutorDetailsPage = async ({ params }: PageProps) => {
+  const { id } = params;
 
-const TutorDetailsPage = async ({ params }: Params) => {
-  const { id } =  await params;
-  const tutordata = await getSingleTutor( id);
+  const tutordata = await getSingleTutor(id);
   const tutor = tutordata?.data;
 
   if (!tutor) {
     return <p>No data available.</p>;
   }
+
 
   return (
     <div className="grid grid-cols-1  lg:grid-cols-4">
@@ -38,7 +34,7 @@ const TutorDetailsPage = async ({ params }: Params) => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="w-full h-full">
             <Image
-              src={tutor.profileImage}
+              src={tutor.profileImage || "/images/default-avatar.png"}
               alt={tutor.name}
               width={300}
               height={300}
@@ -90,7 +86,9 @@ const TutorDetailsPage = async ({ params }: Params) => {
         </div>
       </Container>
     </div>
-    <div className="p-8 flex justify-center align-middle items-center mt-20 border-t-2 lg:border-l-1 border-amber-50">
+    <hr className="w-ful lg:hidden border-t-2 border-t-[#815606] mb-6" />
+    <div className="p-8 flex   lg:pt-48  lg:border-l-1 border-amber-50">
+     
       <ReviewFunc tutorId={id}></ReviewFunc>
     </div>
     </div>

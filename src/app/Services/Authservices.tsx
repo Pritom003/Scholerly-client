@@ -7,7 +7,7 @@ import { getValidToken } from "@/lib/varifyToken";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const registerUserWithFormData = async (formData: FormData) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/v1/auth/create-user`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/create-user`, {
         method: "POST",
         
         body: formData, 
@@ -30,7 +30,7 @@ export const registerUserWithFormData = async (formData: FormData) => {
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const loginUser = async (values: { email: string; password: string }) => {
   try {
-    const response = await fetch("http://localhost:5000/api/v1/auth/login", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export const getCurrentUser = async () => {
 export const getNewToken = async () => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/auth/refresh-token`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/refresh-token`,
       {
         method: "POST",
         headers: {
@@ -87,7 +87,7 @@ export const getNewToken = async () => {
 export const getUserProfile = async () => {
   try {
     const token = await getValidToken();
-    const res = await fetch("http://localhost:5000/api/v1/auth/profile", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/profile`, {
       method: "GET",
       headers: {
         Authorization: `${token}`,
@@ -103,7 +103,7 @@ export const getUserProfile = async () => {
 
 export const updateUserProfile = async (formData: FormData) => {
   try { const token = await getValidToken();
-    const res = await fetch("http://localhost:5000/api/v1/auth/profile", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/profile`, {
       method: "POST",
       body: formData,
       headers: {
@@ -121,7 +121,7 @@ export const updateUserProfile = async (formData: FormData) => {
 
 export const getAllUsers = async () => {
   const token = await getValidToken();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth`, {
     headers: { Authorization: token },
     cache: "no-store",
   });
@@ -130,7 +130,7 @@ export const getAllUsers = async () => {
 
 export const deleteUser = async (id: string) => {
   const token = await getValidToken();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/${id}`, {
     method: 'DELETE',
     headers: { Authorization: token },
   });
@@ -139,7 +139,7 @@ export const deleteUser = async (id: string) => {
 
 export const blockUser = async (id: string) => {
   const token = await getValidToken();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/block-user/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/block-user/${id}`, {
     method: 'PATCH',
     headers: { Authorization: token },
   });
@@ -148,7 +148,7 @@ export const blockUser = async (id: string) => {
 
 export const makeAdmin = async (id: string) => {
   const token = await getValidToken();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/make-admin/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/make-admin/${id}`, {
     method: 'PATCH',
     headers: { Authorization: token },
   });
@@ -156,7 +156,7 @@ export const makeAdmin = async (id: string) => {
 };
 export const approve = async (id: string, status: "accepted" | "rejected") => {
   const token = await getValidToken();
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/approve-tutor/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/auth/approve-tutor/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: token,

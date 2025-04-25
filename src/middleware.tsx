@@ -33,7 +33,7 @@ export const middleware = async (request: NextRequest) => {
 
       return NextResponse.redirect(
         new URL(
-          `http://localhost:3000/sign-in?redirectPath=${pathname}`,
+          `https://sholerly-client.vercel.app/sign-in?redirectPath=${pathname}`,
           request.url
         )
       );

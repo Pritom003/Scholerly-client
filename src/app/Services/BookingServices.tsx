@@ -1,7 +1,7 @@
 import { getValidToken } from "@/lib/varifyToken";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const baseURL = "http://localhost:5000/api/v1";
+const baseURL = `${process.env.NEXT_PUBLIC_BASE_API}/api/v1`;
 
 // Create a new booking
 export const createBooking = async (payload: any) => {
@@ -88,10 +88,10 @@ export const updateBookingPayment = async (
 
  // Adjust based on your actual location
 
-export const getAllBookings = async () => {
+ export const getAllBookings = async () => {
   try {
     const token = await getValidToken();
-    const res = await fetch(`http://localhost:5000/api/v1/all`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/all`, {
       method: 'GET',
       headers: {
         Authorization: `${token}`,
@@ -105,12 +105,13 @@ export const getAllBookings = async () => {
   }
 };
 
+
 // Get all bookings for a student
 export const getStudentBookings = async (studentId: string) => {
 
   try {
     const token =await getValidToken()
-    const res = await fetch(`http://localhost:5000/api/v1/student/${studentId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/api/v1/student/${studentId}`, {
      
       method: "GET",
       headers: {
@@ -119,7 +120,7 @@ export const getStudentBookings = async (studentId: string) => {
       },
       cache: "no-store",
     });
-    console.log(token ,'token');
+    // console.log(token ,'token');
     return await res.json();
   } catch (error: any) {
     console.error("Error fetching student bookings:", error);
@@ -129,9 +130,10 @@ export const getStudentBookings = async (studentId: string) => {
 
 
 // Get all bookings for a tutor
-export const getTutorBookings = async (tutorId: string, token: string) => {
+export const getTutorBookings = async (tutorId: string) => {
   try {
-    const res = await fetch(`${baseURL}/tutor/${tutorId}`, {
+    const token =await getValidToken()
+    const res = await fetch(`${baseURL}/tutorId/${tutorId}`, {
       method: "GET",
       headers: {
         Authorization: ` ${token}`,

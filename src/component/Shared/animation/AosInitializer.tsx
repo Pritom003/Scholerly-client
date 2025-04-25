@@ -1,25 +1,26 @@
 'use client'
 
 import { useEffect } from 'react'
-import AOS from 'aos'
-import 'aos/dist/aos.css'
+import 'aos/dist/aos.css' // ✅ CSS is fine to import globally
 
 const AosInitializer = () => {
   useEffect(() => {
-    AOS.init({
-      duration: 800,
-      once: false, // Change this to false to allow re-trigger on scroll
-      offset: 100,
-      easing: 'ease-in-out',
+    // ✅ Dynamically import AOS inside useEffect to avoid SSR issues
+    import('aos').then(AOS => {
+      AOS.init({
+        duration: 800,
+        once: false,
+        offset: 100,
+        easing: 'ease-in-out',
+      })
+
+      const handleScroll = () => {
+        AOS.refresh()
+      }
+
+      window.addEventListener('scroll', handleScroll)
+      return () => window.removeEventListener('scroll', handleScroll)
     })
-
-    // Optional: refresh AOS on route change or content update
-    const handleScroll = () => {
-      AOS.refresh()
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   return null

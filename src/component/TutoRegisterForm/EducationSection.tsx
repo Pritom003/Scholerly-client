@@ -70,10 +70,15 @@ const EducationSection: React.FC<EducationSectionProps> = ({ form }) => {
               <Button danger onClick={() => remove(name)} icon={<MinusCircleOutlined />}>Remove</Button>
             </div>
           ))}
+       
           <Form.Item>
             <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
               Add Qualification
             </Button>
+            <span className="text-xs text-amber-900">
+  Please provide details about your experience and qualifications (required).
+</span>
+
           </Form.Item>
         </>
       )}

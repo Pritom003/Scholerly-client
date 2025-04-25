@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getValidToken } from "@/lib/varifyToken";
 
-const baseURL = "http://localhost:5000/api/v1/review";
+const baseURL = `${process.env.NEXT_PUBLIC_BASE_API}/api/v1/review`;
 
 // 👉 Create a new review
 export const createReview = async (payload: any) => {

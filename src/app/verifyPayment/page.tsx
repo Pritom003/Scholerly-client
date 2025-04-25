@@ -1,42 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Result, Spin } from "antd";
 import { verifyPayment } from "../Services/Paymentservice";
 
 const VerifyPaymentPage = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
-
-  const bookingId = searchParams.get("order_id");
-  const source = searchParams.get("source");
-  console.log(bookingId,'hre');
-  console.log(source);
   const [status, setStatus] = useState<"pending" | "success" | "failed">("pending");
 
   useEffect(() => {
-    const verifyPaymentStatus = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get("order_id");
+
+    const verify = async () => {
       if (!bookingId) return setStatus("failed");
-      console.log(bookingId);
-  
+
       try {
-        const data = await verifyPayment(bookingId); // ✅ Correct usage
-        console.log("Verification result:", data);
-        if (data?.success) {
-          setStatus("success");
-        } else {
-          setStatus("failed");
-          console.log();
-        }
-      } catch (error) {
-        console.error("Verification error:", error);
+        const result = await verifyPayment(bookingId);
+        setStatus(result?.success ? "success" : "failed");
+      } catch {
         setStatus("failed");
       }
     };
-  
-    verifyPaymentStatus();
-  }, [bookingId]);
+
+    verify();
+  }, []);
 
   if (status === "pending") {
     return (

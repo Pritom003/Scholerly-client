@@ -1,9 +1,11 @@
+"user client"
 import React from 'react'
-import { Card, Input, Rate } from 'antd'
-import { PhoneOutlined, MailOutlined, SearchOutlined } from '@ant-design/icons'
+import { Card,  Rate } from 'antd'
+import { PhoneOutlined, MailOutlined} from '@ant-design/icons'
 import Image from 'next/image'
 import heroImage from '../../../public/kat2.jpg' // replace wi1th your actual image path
 import Container from '../Shared/Container/Container'
+import SearchBar from '../searchComponent/serchALltutor'
 // import Logo from '@/app/assets/Logo'
 // import Logo from '@/app/assets/Logo'
 
@@ -119,27 +121,11 @@ const HeroHome = () => {
           priority
         />
 
-{/* <div className="absolute inset-0 bg-black bg-opacity-10 z-10" /> */}
-
-       {/* Search Bar in the center of the image */}
        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10 w-[90%] max-w-xl">
-    <Input
-      size="large"
-      placeholder="Search for subjects, tutors, or topics..."
-      prefix={<SearchOutlined />}
-      className="shadow-lg !bg-[#E3E3E5] !h-12 !rounded-2xl"
-    />
+   <SearchBar></SearchBar>
   </div>
 
 
-        {/* Mobile Card Overlay */}
-        {/* <div data-aos="fade-zoom-in"
-     data-aos-easing="ease-in-back"
-     data-aos-delay="300"
-     data-aos-offset="0"
-      className="md:hidden absolute bottom-10 left-1/2 transform -translate-x-1/2 w-[90%] z-30">
-          
-        </div> */}
       </div>
     </div>
   )

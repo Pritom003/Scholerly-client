@@ -2,7 +2,7 @@
 import {
     BookOutlined,
     UserOutlined,
-    HomeOutlined,
+
  
     DollarOutlined,
     CheckCircleOutlined,
@@ -10,12 +10,7 @@ import {
 import { GroupIcon } from "lucide-react";
   
   export const tutorRoutes = [
-    {
-      key: "tutor-dashboard",
-      label: "Dashboard",
-      icon: <HomeOutlined />,
-      href: "/dashboard/tutor",
-    },
+
     {
       key: "tutor-profile",
       label: "Profile",
@@ -28,15 +23,16 @@ import { GroupIcon } from "lucide-react";
       icon: <BookOutlined />,
       href: "/dashboard/tutor/bookingrqst",
     },
+    {
+      key: "tut-bookings",
+      label: "Booking History",
+      icon:  <DollarOutlined />,
+      href: "/dashboard/tutor/booking-history",
+    },
   ];
   
   export const studentRoutes = [
-    {
-      key: "student-dashboard",
-      label: "Dashboard",
-      icon: <HomeOutlined />,
-      href: "/dashboard/student",
-    },
+
     {
       key: "student-profile",
       label: "Profile",
@@ -58,12 +54,7 @@ import { GroupIcon } from "lucide-react";
   ];
   
   export const adminRoutes = [
-    {
-      key: "admin-dashboard",
-      label: "Dashboard",
-      icon: <HomeOutlined />,
-      href: "/dashboard/admin",
-    },
+
     {
       key: "admin-profile",
       label: "Profile",

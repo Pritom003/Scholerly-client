@@ -35,9 +35,15 @@ const OurTutors = () => {
 
   useEffect(() => {
     const fetchTutors = async () => {
-      const res = await getAllTutors("limit=4");
+      const res = await getAllTutors();
       if (res?.data) {
-        setTutors(res.data.tutors);
+        const tutors = res.data.tutors
+        const approvedTutors = tutors
+        .filter((tutor: ITutor) => tutor.request === "approved")
+        .slice(0, 4);
+      setTutors(approvedTutors);
+      
+       
       }
     };
     fetchTutors();
@@ -85,6 +91,7 @@ const OurTutors = () => {
                 <p className="text-sm mt-1">📍 {tutor.location}</p>
               )}
               <Link href={`/all-tutor/${tutor._id}`}>
+              {/* hey gpt can it be athe error issue tutor_id */}
                 <Button size="small" className="mt-2 border-2 border-[#815606] text-[#815606] font-bold">
                   View Details
                 </Button>

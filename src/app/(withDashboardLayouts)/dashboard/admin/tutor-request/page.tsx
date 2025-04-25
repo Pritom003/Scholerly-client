@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import React, { useEffect, useState } from 'react';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import {
   Button,
   Card,
@@ -71,11 +72,13 @@ const TutorRequestPage = () => {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+      responsive: ['md' as const],
     },
     {
       title: 'Status',
       dataIndex: 'request',
       key: 'request',
+      responsive: ['md' as const],
       render: (status: string) => <Tag color="orange">{status}</Tag>,
     },
     {
@@ -83,41 +86,52 @@ const TutorRequestPage = () => {
       key: 'action',
       render: (_: any, record: any) => (
         <>
-        {
-            record.request === 'pending' ?  <div>
-                 <Button
-            danger
-            loading={processingId === record._id}
-            onClick={() => handleRequest(record._id, 'rejected')}
-          >
-            Reject
-          </Button> <Button
-            type="primary"
-            loading={processingId === record._id}
-            onClick={() => handleRequest(record._id, 'approved')}
-            style={{ marginRight: '8px' }}
-          >
-            Approve
-          </Button></div>: record.request === 'approved' ?     <Button
-            danger
-            loading={processingId === record._id}
-            onClick={() => handleRequest(record._id, 'rejected')}
-          >
-            Reject
-          </Button>:<Button
-            type="primary"
-            loading={processingId === record._id}
-            onClick={() => handleRequest(record._id, 'approved')}
-            style={{ marginRight: '8px' }}
-          >
-            Approve
-          </Button> 
-        }
-          
-     
+          {record.request === 'pending' ? (
+            <div className="flex flex-wrap gap-2">
+              <Tooltip title="Reject">
+                <Button
+                  danger
+                  shape="circle"
+                  icon={<CloseOutlined />}
+                  loading={processingId === record._id}
+                  onClick={() => handleRequest(record._id, 'rejected')}
+                />
+              </Tooltip>
+              <Tooltip title="Approve">
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={<CheckOutlined />}
+                  loading={processingId === record._id}
+                  onClick={() => handleRequest(record._id, 'approved')}
+                />
+              </Tooltip>
+            </div>
+          ) : record.request === 'approved' ? (
+            <Tooltip title="Reject">
+              <Button
+                danger
+                shape="circle"
+                icon={<CloseOutlined />}
+                loading={processingId === record._id}
+                onClick={() => handleRequest(record._id, 'rejected')}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Approve">
+              <Button
+                type="primary"
+                shape="circle"
+                icon={<CheckOutlined />}
+                loading={processingId === record._id}
+                onClick={() => handleRequest(record._id, 'approved')}
+              />
+            </Tooltip>
+          )}
         </>
       ),
-    },
+    }
+    
   ];
 
   useEffect(() => {
@@ -151,19 +165,20 @@ const TutorRequestPage = () => {
         footer={null}
         width={700}
       >
-        <div className="flex gap-4">
-       
-        
+        <div className="flex flex-col md:flex-row gap-4">
           <div>
-          <Image    src={profileImage}
-            alt="profile"
-           height={100}
-           width={80}
-           className='rounded-full'
-           >
-
-          </Image>
-            <h2>{fullName}</h2>
+            {profileImage && (
+              <Image
+                src={profileImage}
+                alt="profile"
+                height={100}
+                width={100}
+                className="rounded-full"
+              />
+            )}
+          </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-semibold">{fullName}</h2>
             <p><strong>Email:</strong> {email}</p>
             {phone && <p><strong>Phone:</strong> {phone}</p>}
             {location && <p><strong>Location:</strong> {location}</p>}
@@ -175,7 +190,7 @@ const TutorRequestPage = () => {
             {availability?.length > 0 && (
               <>
                 <p><strong>Availability:</strong></p>
-                <ul>
+                <ul className="list-disc pl-5">
                   {availability.map((slot: any, idx: number) => (
                     <li key={idx}>
                       {slot.day}: {slot.from} - {slot.to}
@@ -187,7 +202,7 @@ const TutorRequestPage = () => {
             {qualifications?.length > 0 && (
               <>
                 <p><strong>Qualifications:</strong></p>
-                <ul>
+                <ul className="list-disc pl-5">
                   {qualifications.map((q: any, idx: number) => (
                     <li key={idx}>
                       {q.degree}, {q.institution} ({q.graduationYear || q.currentYear}) - {q.experience}
@@ -203,21 +218,32 @@ const TutorRequestPage = () => {
   };
 
   return (
-    <Card title="ALL TUTORS" >
+<div className='m-4'>    <Card title="ALL TUTORS">
       {loading ? (
         <Spin />
       ) : (
         <>
-        <p className='text-sm font-bold text-green-700'>click on the name to see the  details</p>
+          <p className="text-sm font-bold text-green-700 mb-2">
+            Click on the name to see the details
+          </p>
           <Table
             columns={columns}
             dataSource={tutors}
             rowKey="_id"
+            scroll={{ x: true }}
+            pagination={{
+              pageSize: 5,
+              position: ['bottomCenter'],
+              showSizeChanger: true,
+              pageSizeOptions: ['5', '10', '20'],
+              showTotal: (total, range) =>
+                `${range[0]}-${range[1]} of ${total} tutors`,
+            }}
           />
           {renderTutorModal()}
         </>
       )}
-    </Card>
+    </Card></div>
   );
 };
 

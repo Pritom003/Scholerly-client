@@ -1,7 +1,7 @@
 import { getValidToken } from "@/lib/varifyToken";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const baseURL = "http://localhost:5000/api/v1/tutor";
+const baseURL = `${process.env.NEXT_PUBLIC_BASE_API}/api/v1/tutor`;
 
 // Get all tutors with query (search, filter, paginate)
 export const getAllTutors = async (queryParams = "") => {
@@ -19,12 +19,13 @@ export const getAllTutors = async (queryParams = "") => {
 };
 
 // Get a single tutor by ID
-export const getSingleTutor = async (id: string, token?: string) => {
+export const getSingleTutor = async (id: string) => {
   try {
+    const token =await getValidToken()
     const res = await fetch(`${baseURL}/${id}`, {
       method: "GET",
       headers: {
-        Authorization: token ? `Bearer ${token}` : "",
+        Authorization: token ? `${token}` : "",
       },
       cache: "no-store",
     });
@@ -47,7 +48,7 @@ export const updateTutorProfile = async (
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: ` ${token}`,
       },
       body: JSON.stringify(data),
     });

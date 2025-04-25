@@ -29,8 +29,10 @@ const WhatOurUserSay = () => {
     const fetchReviews = async () => {
       try {
         const data = await getAllreviws("limit=3");
-        console.log(data);
-        setReviews(data.data || []);
+        const allReviews = data.data || [];
+        const firstThree = allReviews.slice(0, 3);
+        setReviews(firstThree);
+        
       } catch (error) {
         console.error("Error fetching reviews:", error);
       }
@@ -98,4 +100,4 @@ const WhatOurUserSay = () => {
   );
 };
 
-export default WhatOurUserSay;
+export default WhatOurUserSay

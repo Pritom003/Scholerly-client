@@ -2,55 +2,84 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card, Modal, Spin } from 'antd';
+import { Card, Modal, Pagination, Spin, Tooltip } from 'antd';
 import { getAllBookings } from '@/app/Services/BookingServices';
+import { EyeOutlined } from '@ant-design/icons'; // 👈 icon only action
 
-
+const PAGE_SIZE = 6;
 const AllBookingsList = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [total, setTotal] = useState(0);
+  // const pageSize = 6;
   useEffect(() => {
     const fetchBookings = async () => {
+      setLoading(true);
       const data = await getAllBookings();
       console.log(data);
-      if (data?.data) setBookings(data.data);
+      if (data?.data) {
+        setBookings(data.data);
+      
+      }
       setLoading(false);
     };
     fetchBookings();
-  }, []);
+  }, [currentPage]); // <-- make sure to include currentPage here
+  
 
   const handleCardClick = (booking: any) => {
     setSelectedBooking(booking);
     setModalVisible(true);
-  };
-
+  };  
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const currntBookings = bookings.slice(startIndex, endIndex);
   return (
-<div>
-    <h1>Bookings</h1>
-    <p className='text-sm font-bold text-green-700'> click on the card to  know the payment details</p>
-    <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      
+    <div className="p-4">
+      <h1 className="text-xl font-semibold mb-1">Bookings</h1>
+      <p className="text-sm font-bold text-green-700 mb-4">
+        Click the icon to view payment details
+      </p>
+
       {loading ? (
         <div className="w-full flex justify-center items-center">
           <Spin size="large" />
         </div>
       ) : (
-        bookings.map((booking: any) => (
-          <Card
-            key={booking._id}
-            title={`transictionID: ${booking?.transaction?.transactionId || 'no payment has made'}`}
-            className="shadow hover:shadow-lg transition cursor-pointer"
-            onClick={() => handleCardClick(booking)}
-          >
-            <p><strong>Student:</strong> {booking.student?.name}</p>
-            <p><strong>Tutor:</strong> {booking.tutor?.name}</p>
-            <p><strong>Status:</strong> {booking.status}</p>
-            <p><strong>Date:</strong> {new Date(booking.bookingDate).toLocaleString()}</p>
-          </Card>
-        ))
+  <>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          {currntBookings.map((booking: any) => (
+            <Card
+              key={booking._id}
+              title={`Transaction: ${booking?.transaction?.transactionId || 'Not Paid'}`}
+              className="shadow hover:shadow-lg transition duration-300"
+              actions={[
+                <Tooltip title="View Details" key="view">
+                  <EyeOutlined
+                    className="text-blue-600 hover:text-blue-800"
+                    onClick={() => handleCardClick(booking)}
+                  />
+                </Tooltip>,
+              ]}
+            >
+              <p><strong>Student:</strong> {booking.student?.name}</p>
+              <p><strong>Tutor:</strong> {booking.tutor?.name}</p>
+              <p><strong>Status:</strong> {booking.status}</p>
+              <p><strong>Date:</strong> {new Date(booking.bookingDate).toLocaleString()}</p>
+            </Card>
+          ))}
+        </div>         <div className="flex justify-center mt-6">
+            <Pagination
+                   current={currentPage}
+                   pageSize={PAGE_SIZE}
+                   total={bookings.length}
+                   onChange={(page) => setCurrentPage(page)}
+                   showSizeChanger={false}
+                 />
+          </div></>
         
       )}
 
@@ -59,6 +88,7 @@ const AllBookingsList = () => {
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
+        centered
       >
         {selectedBooking?.transaction ? (
           <div className="space-y-2">
@@ -75,8 +105,8 @@ const AllBookingsList = () => {
           <p>No transaction details available.</p>
         )}
       </Modal>
+      
     </div>
-</div>
   );
 };
 

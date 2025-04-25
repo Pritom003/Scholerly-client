@@ -3,7 +3,7 @@
 import React from 'react';
 import Lottie from 'lottie-react';
 import animations, { LottieKey } from './animationandkey';
-// import teacheranimation  from '../../../public/lottieanimation/Animation - 1744782886622.json';
+
 type Props = {
   name: LottieKey;
   className?: string;

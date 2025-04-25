@@ -15,7 +15,7 @@ const AvailabilityGrid = ({ availability }: Props) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {daysOfWeek.map((day) => {
-        const match = availability.find((slot) => slot.day === day);
+        const match = availability?.find((slot) => slot.day === day);
         return (
           <div
             key={day}

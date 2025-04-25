@@ -19,7 +19,15 @@ const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
       <Sidebar collapsed={collapsed} />
       <Layout>
         <HeaderBar collapsed={collapsed} setCollapsed={setCollapsed} />
-        <Content className="p-4 bg-gray-100 min-h-[100vh]">{children}</Content>
+        <Content
+  className=" min-h-[100vh] bg-cover bg-center"
+  style={{
+    backgroundImage: "url('/dashbg-2.jpg')", // path relative to public/
+  }}
+>
+  {children}
+</Content>
+
       </Layout>
     </Layout>
   );

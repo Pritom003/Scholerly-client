@@ -1,0 +1,14 @@
+{
+    "build": {
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "commands": {
+        "build": "npm run build",
+        "dev": "next dev --port $PORT",
+        "install": "npm install"
+      }
+    },
+    "outputDirectory": ".next"
+  }
+  
