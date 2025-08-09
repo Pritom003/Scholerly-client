@@ -17,16 +17,26 @@ export const getAllTutors = async (queryParams = "") => {
     return null;
   }
 };
+    
+export const getsubjects= async () => {
+  try {
+    const res = await fetch(`${baseURL}/all/subjects`, {
+      method: "GET",
+      cache: "no-store",
+    });
 
+    return await res.json();
+  } catch (error: any) {
+    console.error("Error fetching tutors:", error);
+    return null;
+  }
+};
 // Get a single tutor by ID
 export const getSingleTutor = async (id: string) => {
   try {
-    const token =await getValidToken()
+    // const token =await getValidToken()
     const res = await fetch(`${baseURL}/${id}`, {
       method: "GET",
-      headers: {
-        Authorization: token ? `${token}` : "",
-      },
       cache: "no-store",
     });
 

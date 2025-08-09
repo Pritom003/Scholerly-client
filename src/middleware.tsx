@@ -1,66 +1,59 @@
-// Import Next.js middleware helpers.
 import { NextRequest, NextResponse } from "next/server";
-// Import the helper function that retrieves the current user (via cookies, JWT, etc.).
 import { getCurrentUser } from "./app/Services/Authservices";
 
+// Public routes that anyone can access (including unauthenticated users)
+const publicRoutes = [
+  "/sign-in",
+  "/signUp",
+  "/all-tutor",          // Allow access to tutor list
+];
 
+// Role-based protected route patterns
 const roleBasedPrivateRoutes = {
-  student: [/^\/student/, /^\/all-tutor/],
-  tutor: [/^\/tutor/, /^\/all-tutor/],
-  // Admins are allowed to access any route beginning with '/admin'
-  admin: [/^\/admin/,/^\/all-tutor/],
+  student: [/^\/student/],
+  tutor: [/^\/tutor/],
+  admin: [/^\/admin/],
 };
 
-
-const authRoutes = ["/sign-in", "/signUp"];
-
-// --------------------------------------------------------------------
-// The main middleware function that runs before your route handlers.
 export const middleware = async (request: NextRequest) => {
-  // Extract the pathname from the current URL (e.g., '/all-tutor/123').
   const { pathname } = request.nextUrl;
 
-  // Get user information by decoding the token stored in cookies.
-  // This could include the user's role and other info.
+  // Allow all public routes
+  if (publicRoutes.some((path) => pathname.startsWith(path))) {
+    return NextResponse.next();
+  }
+
+  // Get logged-in user info (from cookies or headers)
   const userInfo = await getCurrentUser();
 
-  // If the user is NOT logged in...
+  // If not logged in and not accessing a public route, redirect to sign-in
   if (!userInfo) {
-    // ...but they are trying to access a public auth route, allow them.
-    if (authRoutes.includes(pathname)) {
-      return NextResponse.next();
-    } else {
-
-      return NextResponse.redirect(
-        new URL(
-          `https://sholerly-client.vercel.app/sign-in?redirectPath=${pathname}`,
-          request.url
-        )
-      );
-    }
+    return NextResponse.redirect(
+      new URL(
+        `/sign-in?redirectPath=${pathname}`,
+        request.nextUrl.origin
+      )
+    );
   }
 
-  
-  if (userInfo?.role && roleBasedPrivateRoutes[userInfo?.role as keyof typeof roleBasedPrivateRoutes]) {
+  // Enforce role-based route protection
+  const userRole = userInfo.role as keyof typeof roleBasedPrivateRoutes;
+  const allowedRoutes = roleBasedPrivateRoutes[userRole];
 
-    const routes = roleBasedPrivateRoutes[userInfo.role as keyof typeof roleBasedPrivateRoutes];
-
-    if (routes.some((route) => pathname.match(route))) {
-      
-      return NextResponse.next();
-    }
+  if (allowedRoutes && allowedRoutes.some((regex) => regex.test(pathname))) {
+    return NextResponse.next();
   }
 
-  
+  // If authenticated but trying to access a protected route not matching their role
   return NextResponse.redirect(new URL("/", request.url));
 };
 
-
 export const config = {
   matcher: [
-    "/all-tutor/:page*",  // Protect dynamic /all-tutor routes (e.g., /all-tutor/123)      // Protect shop creation page (e.g., for tutors)
-    "/admin/:page*",      // Protect all admin pages
-    "/tutor/:page*",      // Protect pages meant for tutors
-    "/student/:page*",    // Protect pages meant for students
+    // Only match routes that need protection
+    "/admin/:path*",
+    "/tutor/:path*",
+    "/student/:path*",
+    // Do NOT include /all-tutor or /sign-in here
   ],
 };

@@ -6,8 +6,9 @@ import {
  
     DollarOutlined,
     CheckCircleOutlined,
+    BarChartOutlined,
   } from "@ant-design/icons";
-import { GroupIcon } from "lucide-react";
+import { GroupIcon, List, PenIcon } from "lucide-react";
   
   export const tutorRoutes = [
 
@@ -16,6 +17,12 @@ import { GroupIcon } from "lucide-react";
       label: "Profile",
       icon: <UserOutlined />,
       href: "/dashboard/profile",
+    },
+    {
+      key: "BlogList",
+      label: "My Blogs",
+      icon: <List />,
+      href: "/dashboard/tutor/blogs-list",
     },
     {
       key: "tutor-bookings",
@@ -61,18 +68,18 @@ import { GroupIcon } from "lucide-react";
       icon: <UserOutlined />,
       href: "/dashboard/profile",
     },
-    // {
-    //   key: "admin-stats",
-    //   label: "Statistics",
-    //   icon: <BarChartOutlined />,
-    //   href: "/dashboard/admin/stats",
-    // },
-    // {
-    //   key: "admin-payments",
-    //   label: "Payment History",
-    //   icon: <DollarOutlined />,
-    //   href: "/dashboard/admin/payment-history",
-    // },
+    {
+      key: "admin-stats",
+      label: "Statistics",
+      icon: <BarChartOutlined/>,
+      href: "/dashboard/admin/dashboard-stats",
+    },
+    {
+      key: "admin-blogs",
+      label: "Blogs request",
+      icon: <PenIcon />,
+      href: "/dashboard/admin/blog-list-table",
+    },
     {
       key: "admin-bookings",
       label: "Bookings",

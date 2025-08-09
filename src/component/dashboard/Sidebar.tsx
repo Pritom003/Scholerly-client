@@ -37,7 +37,7 @@ const Sidebar = ({ collapsed }: { collapsed: boolean }) => {
       collapsed={collapsed}
       trigger={null}
       collapsedWidth={50}
-      className="!bg-[#815606] min-h-[100vh]"
+      className="!bg-[#815606] min-h-[100vh] "
     >
       <div className="py-[13px] text-center flex justify-center align-middle font-bold text-xl">
         <Image src={logoWith} alt="logoimg" height={50} width={50} />

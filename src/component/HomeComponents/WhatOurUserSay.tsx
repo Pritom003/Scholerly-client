@@ -41,7 +41,7 @@ const WhatOurUserSay = () => {
   }, []);
 
   return (
-    <div className="py-20 ">
+    <div className="pt-20 ">
     <div className='grid justify-center align-middle items-center'>
       <div data-aos="fade-left"
     data-aos-duration="2000" className=' max-w-[600px] my-10 '>

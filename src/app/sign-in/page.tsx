@@ -12,8 +12,9 @@ const SignInPage = () => {
   return (
 <div className='bg-[#E3E3E5] pt-5 pb-20'>
   <Container>
-  <div className="min-h-screen  items-center justify-center">
-    <div className='max-w-xl mx-auto mt-10 p-6'>
+  <div className="
+  ">
+    <div className='mt-10 p-6'>
     <SectionTitle
        text="Login to your account" 
        description="Please enter your credentials to continue" 

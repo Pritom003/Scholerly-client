@@ -2,96 +2,113 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Card, Modal, Pagination, Spin, Tooltip } from 'antd';
+import { Table, Drawer, Spin, Pagination } from 'antd';
 import { getAllBookings } from '@/app/Services/BookingServices';
-import { EyeOutlined } from '@ant-design/icons'; // 👈 icon only action
 
 const PAGE_SIZE = 6;
+
 const AllBookingsList = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState<any>(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [total, setTotal] = useState(0);
-  // const pageSize = 6;
+
   useEffect(() => {
     const fetchBookings = async () => {
       setLoading(true);
       const data = await getAllBookings();
-      console.log(data);
       if (data?.data) {
         setBookings(data.data);
-      
       }
       setLoading(false);
     };
     fetchBookings();
-  }, [currentPage]); // <-- make sure to include currentPage here
-  
+  }, [currentPage]);
 
-  const handleCardClick = (booking: any) => {
-    setSelectedBooking(booking);
-    setModalVisible(true);
-  };  
+  const handleRowClick = (record: any) => {
+    setSelectedBooking(record);
+    setDrawerVisible(true);
+  };
+
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
-  const currntBookings = bookings.slice(startIndex, endIndex);
+  const currentBookings = bookings.slice(startIndex, endIndex);
+
+  const columns = [
+    {
+      title: 'Transaction',
+      dataIndex: ['transaction', 'transactionId'],
+      key: 'transactionId',
+      render: (text: string) => text || 'Not Paid',
+    },
+    {
+      title: 'Student',
+      dataIndex: ['student', 'name'],
+      key: 'studentName',
+    },
+    {
+      title: 'Tutor',
+      dataIndex: ['tutor', 'name'],
+      key: 'tutorName',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+   
+  ];
+
   return (
     <div className="p-4">
-      <h1 className="text-xl font-semibold mb-1">Bookings</h1>
-      <p className="text-sm font-bold text-green-700 mb-4">
-        Click the icon to view payment details
+      <h1 className="text-xl font-semibold mb-2">All Bookings</h1>
+      <p className="text-sm font-medium text-green-700 mb-4">
+        Click on a row to view transaction details.
       </p>
 
       {loading ? (
-        <div className="w-full flex justify-center items-center">
+        <div className="w-full flex justify-center items-center min-h-[200px]">
           <Spin size="large" />
         </div>
       ) : (
-  <>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-          {currntBookings.map((booking: any) => (
-            <Card
-              key={booking._id}
-              title={`Transaction: ${booking?.transaction?.transactionId || 'Not Paid'}`}
-              className="shadow hover:shadow-lg transition duration-300"
-              actions={[
-                <Tooltip title="View Details" key="view">
-                  <EyeOutlined
-                    className="text-blue-600 hover:text-blue-800"
-                    onClick={() => handleCardClick(booking)}
-                  />
-                </Tooltip>,
-              ]}
-            >
-              <p><strong>Student:</strong> {booking.student?.name}</p>
-              <p><strong>Tutor:</strong> {booking.tutor?.name}</p>
-              <p><strong>Status:</strong> {booking.status}</p>
-              <p><strong>Date:</strong> {new Date(booking.bookingDate).toLocaleString()}</p>
-            </Card>
-          ))}
-        </div>         <div className="flex justify-center mt-6">
+        <>
+          <div className="overflow-x-auto max-w-xl mx-auto">
+            <Table
+              columns={columns}
+              dataSource={currentBookings}
+              rowKey="_id"
+              pagination={false}
+              onRow={(record) => ({
+                onClick: () => handleRowClick(record),
+              })}
+              className="custom-booking-table w-full"
+              bordered
+            />
+          </div>
+
+          <div className="flex justify-center mt-6">
             <Pagination
-                   current={currentPage}
-                   pageSize={PAGE_SIZE}
-                   total={bookings.length}
-                   onChange={(page) => setCurrentPage(page)}
-                   showSizeChanger={false}
-                 />
-          </div></>
-        
+              current={currentPage}
+              pageSize={PAGE_SIZE}
+              total={bookings.length}
+              onChange={(page) => setCurrentPage(page)}
+              showSizeChanger={false}
+            />
+          </div>
+        </>
       )}
 
-      <Modal
+      <Drawer
         title="Transaction Details"
-        open={modalVisible}
-        onCancel={() => setModalVisible(false)}
-        footer={null}
-        centered
+        placement="right"
+        open={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        width={360}
+        className="p-4 !bg-amber-100 !min-w-[300px]"
       >
         {selectedBooking?.transaction ? (
-          <div className="space-y-2">
+          <div className="space-y-2 text-sm">
             <p><strong>Transaction ID:</strong> {selectedBooking.transaction.transactionId}</p>
             <p><strong>Status:</strong> {selectedBooking.transaction.transactionStatus}</p>
             <p><strong>Bank Status:</strong> {selectedBooking.transaction.bank_status}</p>
@@ -104,8 +121,24 @@ const AllBookingsList = () => {
         ) : (
           <p>No transaction details available.</p>
         )}
-      </Modal>
-      
+      </Drawer>
+
+      {/* Tailwind-enhanced styles */}
+      <style jsx global>{`
+        .custom-booking-table .ant-table-thead > tr > th {
+          background-color: #5c4033; /* Deep brown */
+          color: white;
+        }
+
+        .custom-booking-table .ant-table-tbody > tr:hover > td {
+          background-color: #baa49a; /* Light brown on hover */
+          transition: background-color 0.3s ease;
+        }
+
+        .custom-booking-table .ant-table-cell {
+          transition: background-color 0.2s ease;
+        }
+      `}</style>
     </div>
   );
 };

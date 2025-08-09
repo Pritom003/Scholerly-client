@@ -10,28 +10,26 @@ import {
   Input,
   Modal,
   Spin,
-  Tooltip,
-  Upload,
   message,
 } from "antd";
 import {
   EditOutlined,
   LockOutlined,
   SaveOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import { getUserProfile, updateUserProfile } from "@/app/Services/Authservices";
 import ImageUploader from "@/lib/ImageUploaderField";
 import { toast } from "sonner";
-
+import ProfileBg from '../../../../../public/ProfileBg.jpg';
+import Image from "next/image";
 const UserProfile = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
-  const [fileList, setFileList] = useState<any[]>([]);
+  const [file, setFile] = useState<any>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [showPasswordFields, setShowPasswordFields] = useState(false);
-  const [file, setFile] = useState<any>(null);
+
   const fetchProfile = async () => {
     try {
       const res = await getUserProfile();
@@ -59,12 +57,10 @@ const UserProfile = () => {
 
     try {
       const res = await updateUserProfile(formData);
-      console.log(res);
       if (res?.success) {
         toast.success("Profile updated!");
         fetchProfile();
         setModalVisible(false);
-        setFileList([]);
         setShowPasswordFields(false);
       } else {
         message.error(res?.message || "Update failed");
@@ -81,40 +77,64 @@ const UserProfile = () => {
   if (loading) return <Spin fullscreen />;
 
   return (
-    <div className="max-w-3xl  mt-10 p-4   mx-4">
-      <h1 className="text-2xl font-light"> Hello <span className="capitalize">{profile.name}</span></h1>
-      <div className="flex gap-6 border-2 my-2 items-center p-6 rounded-lg shadow-md  relative">
+    <div className="   mb-5 shadow-lg rounded-lg overflow-hidden">
+      {/* Cover Photo */}
+      <div className="relative h-56 bg-gray-300">
+        <Image
+          src={ProfileBg}
+          alt="Cover"
+          layout="fill"
+          objectFit="cover"
+        />
+
         {/* Profile Image */}
-        <div className="flex-shrink-0">
-          <div className="w-32 h-32 border-4 border-brown-700 rounded-full overflow-hidden">
-            <Avatar
-              src={profile?.Profileimage}
-              alt="Profile Image"
-              size={128}
-              className="object-cover w-full h-full"
-            />
+        <div className="absolute -bottom-16 left-6">
+          <Avatar
+            src={profile?.Profileimage}
+            size={128}
+            className="border-4 border-white shadow-md"
+          />
+        </div>
+      </div>
+
+      {/* Profile Content */}
+      <div className="pt-20 px-6 pb-8 bg-amber-50">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold capitalize">{profile?.name}</h1>
+            <p className="text-gray-500">{profile?.email}</p>
+            <p className="text-gray-600 mt-1">Role: <span className="capitalize">{profile?.role || "User"}</span></p>
+          </div>
+          <Button
+            icon={<EditOutlined />}
+            onClick={() => setModalVisible(true)}
+            className="!text-white !bg-amber-950"
+          >
+            Edit Profile
+          </Button>
+        </div>
+
+        {/* Static Info (you can replace these with real fields later) */}
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+          <div>
+            <h3 className="font-semibold">Location</h3>
+            <p>Dhaka, Bangladesh</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Joined</h3>
+            <p>January 2024</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Education</h3>
+            <p>BSc in Computer Science</p>
+          </div>
+          <div>
+            <h3 className="font-semibold">Website</h3>
+            <p>https://example.com</p>
           </div>
         </div>
-
-        {/* Profile Info */}
-        <div className="flex flex-col flex-grow">
-          <h2 className="text-2xl font-semibold capitalize">
-            {profile?.name}</h2>
-          <p className="text-gray-600 ">Role: <span>   {profile?.role || "User"}</span>
-          </p>
-          <p className="text-gray-500"> email: {profile?.email}</p>
-        </div>
-
-        {/* Edit Button */}
-        
       </div>
-      <Button
-          icon={<EditOutlined />}
-          className="flex justify-end mx-10 !text-white !bg-amber-950"
-          onClick={() => setModalVisible(true)}
-        >
-          Edit
-        </Button>
+
       {/* Modal for Editing Profile */}
       <Modal
         open={modalVisible}
@@ -128,12 +148,10 @@ const UserProfile = () => {
           </Form.Item>
 
           <Form.Item label="Profile Image">
-  <ImageUploader
-    onFileSelect={(file) => setFile(file)}
-  />
-</Form.Item>
+            <ImageUploader onFileSelect={(file) => setFile(file)} />
+          </Form.Item>
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-2">
             <h3 className="text-md font-medium">Change Password?</h3>
             <Button
               icon={<LockOutlined />}
@@ -159,7 +177,6 @@ const UserProfile = () => {
           <Form.Item>
             <Button
               icon={<SaveOutlined />}
-              // type="primary"
               htmlType="submit"
               className="!text-white !bg-amber-950"
             >

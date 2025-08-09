@@ -11,7 +11,7 @@ import Sidebar from "./Sidebar";
 const { Content } = Layout;
 
 const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   return (
     <Layout className="min-h-screen">

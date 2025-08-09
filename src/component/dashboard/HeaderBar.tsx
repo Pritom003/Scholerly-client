@@ -20,9 +20,13 @@ const HeaderBar = ({
 
   return (
     <Header className=" !bg-[#e7e4df] flex justify-between items-center px-4 shadow-sm">
-      <div onClick={() => setCollapsed(!collapsed)} className="cursor-pointer text-xl">
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </div>
+ <div
+  onClick={() => setCollapsed(!collapsed)}
+  className="cursor-pointer text-xl hidden md:block"
+>
+  {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+</div>
+
       <div className="flex items-center gap-4">
        <Link href="/" className="text-black"> <Home className="text-black"></Home></Link>
    <NotificationBell></NotificationBell>

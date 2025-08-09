@@ -34,17 +34,21 @@ const NotificationBell = () => {
     setLoading(false)
   }
 
-  useEffect(() => {
-    if (user?.id) {
+useEffect(() => {
+  if (user?.id) {
+    fetchNotifications()
+
+    const interval = setInterval(() => {
       fetchNotifications()
+    }, 10000)
 
-      const interval = setInterval(() => {
-        fetchNotifications()
-      }, 10000)
+    return () => clearInterval(interval)
+  } else {
+    // If the user logs out, clear notifications
+    setNotifications([])
+  }
+}, [user?.id])
 
-      return () => clearInterval(interval)
-    }
-  }, [user?.id])
 
   // Handle notification click (mark as read and remove from state)
  // Handle notification click (mark as read and redirect)
@@ -67,7 +71,7 @@ const handleNotificationClick = async (id: string, notif: any) => {
     }
   } else if (user?.role === 'admin'&& notif=== 'approval') {
     router.push('/dashboard/admin/tutor-request') // Default admin dashboard
-  }else if (user?.role === 'tutor'&& notif=== 'review' || notif=== 'approval') {
+  }else if (user?.role === 'tutor'&& notif=== 'review' || notif=== 'approval' || notif=== 'blog') {
     router.push(`/all-tutor`) // Default admin dashboard
 
   }
